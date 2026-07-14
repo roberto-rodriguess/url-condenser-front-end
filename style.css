@@ -1,0 +1,182 @@
+* {
+
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+
+}
+
+
+body {
+
+
+    font-family: Arial, Helvetica, sans-serif;
+
+    background:#f4f6f8;
+
+    color:#333;
+
+}
+
+
+
+header {
+
+
+    background:#111827;
+
+    color:white;
+
+    text-align:center;
+
+    padding:40px;
+
+
+}
+
+
+
+header h1 {
+
+    font-size:38px;
+
+}
+
+
+
+main {
+
+
+    width:90%;
+
+    max-width:1000px;
+
+    margin:40px auto;
+
+
+}
+
+
+
+.card {
+
+
+    background:white;
+
+    padding:30px;
+
+    border-radius:12px;
+
+    margin-bottom:30px;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.1);
+
+
+}
+
+
+
+input {
+
+
+    width:80%;
+
+    padding:14px;
+
+    border:1px solid #ccc;
+
+    border-radius:8px;
+
+    font-size:16px;
+
+
+}
+
+
+
+button {
+
+
+    padding:14px 25px;
+
+    background:#2563eb;
+
+    color:white;
+
+    border:none;
+
+    border-radius:8px;
+
+    cursor:pointer;
+
+}
+
+
+
+button:hover {
+
+
+    background:#1d4ed8;
+
+
+}
+
+
+
+table {
+
+
+    width:100%;
+
+    margin-top:20px;
+
+    border-collapse:collapse;
+
+
+}
+
+
+
+th,td {
+
+
+    padding:12px;
+
+    border-bottom:1px solid #ddd;
+
+    text-align:left;
+
+
+}
+
+
+
+a {
+
+
+    color:#2563eb;
+
+
+}
+
+
+
+.copy {
+
+
+    background:#16a34a;
+
+    margin-right:5px;
+
+
+}
+
+
+
+.delete {
+
+
+    background:#dc2626;
+
+
+}
