@@ -12,39 +12,47 @@
 
 <header>
     <h1>URL Condenser</h1>
-    <p>
-        Encurte suas URLs de forma simples e rápida
-    </p>
+    <p>Encurte suas URLs de forma simples e rápida</p>
 </header>
 
 <main>
-    <section class="card">
-        <h2>Criar URL curta</h2>
-        <input
-                id="urlInput"
-                type="text"
-                placeholder="Digite sua URL aqui">
-        <button onclick="createUrl()">
-            Encurtar
-        </button>
-        <div id="result"></div>
+    <section class="card" aria-labelledby="form-title">
+        <h2 id="form-title">Criar URL curta</h2>
+
+        <form id="urlForm">
+            <div class="form-group">
+                <label for="urlInput" class="sr-only">Digite a URL original</label>
+                <input
+                        id="urlInput"
+                        type="url"
+                        placeholder="https://exemplo.com"
+                        required
+                >
+            </div>
+            <button type="submit">Encurtar</button>
+        </form>
+
+        <div id="result" aria-live="polite"></div>
     </section>
-    <section class="card">
-        <h2>URLs cadastradas</h2>
-        <table>
+
+    <section class="card" aria-labelledby="table-title">
+        <h2 id="table-title">URLs cadastradas</h2>
+        <div class="table-container"> <table>
             <thead>
             <tr>
-                <th>Original</th>
-                <th>Código</th>
-                <th>Cliques</th>
-                <th>Ações</th>
+                <th scope="col">Original</th>
+                <th scope="col">Código</th>
+                <th scope="col">Cliques</th>
+                <th scope="col">Ações</th>
             </tr>
             </thead>
             <tbody id="urlTable">
             </tbody>
         </table>
+        </div>
     </section>
 </main>
+
 <script src="script.js"></script>
 </body>
 </html>
