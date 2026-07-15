@@ -1,6 +1,7 @@
-// Substitua o início do script por isto:
-
-const API = "http://localhost:8080";
+// Configuração do endpoint da API (usa localhost em desenvolvimento, ou a URL do Railway em produção)
+const API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
+    ? "http://localhost:8080"
+    : "SUA_URL_DO_BACKEND_NO_RAILWAY"; // Substitua com a URL gerada pelo Railway (ex: https://urlcondenser-production.up.railway.app)
 const urlForm = document.getElementById("urlForm");
 
 // Escuta o envio do formulário (funciona ao clicar no botão ou dar Enter)
