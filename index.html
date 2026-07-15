@@ -2,109 +2,49 @@
 <html lang="pt-BR">
 
 <head>
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <title>URL Condenser</title>
-
     <link rel="stylesheet" href="style.css">
-
 </head>
-
 
 <body>
 
-
 <header>
-
     <h1>URL Condenser</h1>
-
     <p>
         Encurte suas URLs de forma simples e rápida
     </p>
-
 </header>
 
-
-
 <main>
-
-
-<section class="card">
-
-
-<h2>Criar URL curta</h2>
-
-
-<input 
-id="urlInput"
-type="text"
-placeholder="Digite sua URL aqui">
-
-
-<button onclick="createUrl()">
-Encurtar
-</button>
-
-
-
-<div id="result"></div>
-
-
-</section>
-
-
-
-
-<section class="card">
-
-
-<h2>URLs cadastradas</h2>
-
-
-<table>
-
-
-<thead>
-
-<tr>
-
-<th>Original</th>
-
-<th>Código</th>
-
-<th>Cliques</th>
-
-<th>Ações</th>
-
-</tr>
-
-</thead>
-
-
-
-<tbody id="urlTable">
-
-
-</tbody>
-
-
-</table>
-
-
-</section>
-
-
-
+    <section class="card">
+        <h2>Criar URL curta</h2>
+        <input
+                id="urlInput"
+                type="text"
+                placeholder="Digite sua URL aqui">
+        <button onclick="createUrl()">
+            Encurtar
+        </button>
+        <div id="result"></div>
+    </section>
+    <section class="card">
+        <h2>URLs cadastradas</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Original</th>
+                <th>Código</th>
+                <th>Cliques</th>
+                <th>Ações</th>
+            </tr>
+            </thead>
+            <tbody id="urlTable">
+            </tbody>
+        </table>
+    </section>
 </main>
-
-
-
 <script src="script.js"></script>
-
-
 </body>
-
-
 </html>
