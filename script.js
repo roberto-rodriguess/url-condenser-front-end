@@ -1,7 +1,7 @@
 // Configuração do endpoint da API (usa localhost em desenvolvimento, ou a URL do Railway em produção)
 const API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://localhost:8080"
-    : "https://url-condenser-back-end-production.up.railway.app"; // Substitua com a URL gerada pelo Railway (ex: https://urlcondenser-production.up.railway.app)
+    : "https://urlcondenser.up.railway.app"; // Substitua com a URL gerada pelo Railway (ex: https://urlcondenser-production.up.railway.app)
 
 // Controle de sessão e Token JWT
 let token = localStorage.getItem("token");
