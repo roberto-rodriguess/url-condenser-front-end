@@ -1,12 +1,85 @@
 // Configuração do endpoint da API (usa localhost em desenvolvimento, ou a URL do Railway em produção)
 const API = window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1"
     ? "http://localhost:8080"
-    : "https://url-condenser-back-end-production.up.railway.app";
-const urlForm = document.getElementById("urlForm");
+    : "https://url-condenser-back-end-production.up.railway.app"; // Substitua com a URL gerada pelo Railway (ex: https://urlcondenser-production.up.railway.app)
 
-// Escuta o envio do formulário (funciona ao clicar no botão ou dar Enter)
+// Controle de sessão e Token JWT
+let token = localStorage.getItem("token");
+
+// Elementos do DOM
+const loginSection = document.getElementById("loginSection");
+const dashboardSection = document.getElementById("dashboardSection");
+const loginForm = document.getElementById("loginForm");
+const urlForm = document.getElementById("urlForm");
+const logoutBtn = document.getElementById("logoutBtn");
+
+// Gerenciamento e alternância de telas
+function checkSession() {
+    if (token) {
+        loginSection.classList.add("hidden");
+        dashboardSection.classList.remove("hidden");
+        logoutBtn.classList.remove("hidden");
+        loadUrls();
+    } else {
+        loginSection.classList.remove("hidden");
+        dashboardSection.classList.add("hidden");
+        logoutBtn.classList.add("hidden");
+    }
+}
+
+// Handler para expiração ou falta de autorização (403 Forbidden)
+function handleUnauthorized() {
+    token = null;
+    localStorage.removeItem("token");
+    checkSession();
+    alert("Sua sessão expirou ou é inválida. Por favor, faça login novamente.");
+}
+
+// Evento de Envio do Formulário de Login
+loginForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const loginVal = document.getElementById("loginInput").value.trim();
+    const senhaVal = document.getElementById("senhaInput").value.trim();
+
+    try {
+        const response = await fetch(`${API}/login`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ login: loginVal, senha: senhaVal })
+        });
+
+        if (!response.ok) {
+            if (response.status === 403 || response.status === 401) {
+                throw new Error("Usuário ou senha incorretos.");
+            }
+            throw new Error("Erro ao tentar realizar login.");
+        }
+
+        const data = await response.json();
+        token = data.token;
+        localStorage.setItem("token", token);
+
+        document.getElementById("loginInput").value = "";
+        document.getElementById("senhaInput").value = "";
+        checkSession();
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Não foi possível realizar o login.");
+    }
+});
+
+// Evento de Sair (Logout)
+logoutBtn.addEventListener("click", () => {
+    token = null;
+    localStorage.removeItem("token");
+    document.getElementById("result").innerHTML = ""; // Limpa resultados anteriores
+    checkSession();
+});
+
+// Evento de Envio do Formulário de Encurtamento de URL (Autenticado)
 urlForm.addEventListener("submit", async (event) => {
-    event.preventDefault(); // Impede a página de recarregar com o envio do form
+    event.preventDefault();
 
     const input = document.getElementById("urlInput");
     const url = input.value.trim();
@@ -14,9 +87,17 @@ urlForm.addEventListener("submit", async (event) => {
     try {
         const response = await fetch(`${API}/api/urls`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { 
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            },
             body: JSON.stringify({ originalUrl: url })
         });
+
+        if (response.status === 403) {
+            handleUnauthorized();
+            return;
+        }
 
         if (!response.ok) throw new Error("Erro ao criar URL");
 
@@ -31,9 +112,20 @@ urlForm.addEventListener("submit", async (event) => {
     }
 });
 
+// Carregar URLs Cadastradas (Autenticado)
 async function loadUrls() {
+    if (!token) return;
+
     try {
-        const response = await fetch(`${API}/api/urls`);
+        const response = await fetch(`${API}/api/urls`, {
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (response.status === 403) {
+            handleUnauthorized();
+            return;
+        }
+
         if (!response.ok) throw new Error("Erro ao buscar URLs");
 
         const urls = await response.json();
@@ -43,9 +135,21 @@ async function loadUrls() {
     }
 }
 
+// Excluir URL (Autenticado)
 async function deleteUrl(id) {
+    if (!token) return;
+
     try {
-        const response = await fetch(`${API}/api/urls/${id}`, { method: "DELETE" });
+        const response = await fetch(`${API}/api/urls/${id}`, { 
+            method: "DELETE",
+            headers: { "Authorization": `Bearer ${token}` }
+        });
+
+        if (response.status === 403) {
+            handleUnauthorized();
+            return;
+        }
+
         if (!response.ok) throw new Error("Erro ao deletar");
         loadUrls();
     } catch (error) {
@@ -58,11 +162,8 @@ async function deleteUrl(id) {
 
 function exibirUrlCriada(shortUrl) {
     const resultContainer = document.getElementById("result");
-
-    // Limpa o container
     resultContainer.innerHTML = "";
 
-    // Cria os elementos de forma limpa e segura
     const p = document.createElement("p");
     p.textContent = "Sua URL curta:";
 
@@ -72,9 +173,8 @@ function exibirUrlCriada(shortUrl) {
     a.textContent = shortUrl;
 
     const button = document.createElement("button");
-    button.className = "copy";
+    button.className = "copy btn-primary";
     button.textContent = "Copiar";
-    // Evita usar 'onclick' inline no HTML, usa event listener direto no JS
     button.addEventListener("click", () => copyUrl(shortUrl));
 
     resultContainer.appendChild(p);
@@ -84,9 +184,8 @@ function exibirUrlCriada(shortUrl) {
 
 function renderizarTabela(urls) {
     const table = document.getElementById("urlTable");
-    table.innerHTML = ""; // Limpa a tabela uma única vez
+    table.innerHTML = "";
 
-    // Criamos um fragmento em memória para renderizar tudo de uma vez (melhor performance)
     const fragment = document.createDocumentFragment();
 
     urls.forEach(url => {
@@ -106,14 +205,13 @@ function renderizarTabela(urls) {
             </td>
         `;
 
-        // Adiciona eventos aos botões recém-criados de forma elegante
         tr.querySelector(".copy").addEventListener("click", () => copyUrl(`${API}/${url.shortCode}`));
         tr.querySelector(".delete").addEventListener("click", () => deleteUrl(url.id));
 
         fragment.appendChild(tr);
     });
 
-    table.appendChild(fragment); // Injeta todos os registros na tela de uma só vez
+    table.appendChild(fragment);
 }
 
 // --- UTILITÁRIOS ---
@@ -124,7 +222,6 @@ function copyUrl(url) {
         .catch(() => alert("Erro ao copiar URL."));
 }
 
-// Função simples para mitigar ataques XSS limpando caracteres perigosos
 function escapeHtml(string) {
     const div = document.createElement('div');
     div.innerText = string;
@@ -132,4 +229,4 @@ function escapeHtml(string) {
 }
 
 // --- INICIALIZAÇÃO ---
-loadUrls();
+checkSession();
