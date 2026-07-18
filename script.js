@@ -8,24 +8,44 @@ let token = localStorage.getItem("token");
 
 // Elementos do DOM
 const loginSection = document.getElementById("loginSection");
+const registerSection = document.getElementById("registerSection");
 const dashboardSection = document.getElementById("dashboardSection");
 const loginForm = document.getElementById("loginForm");
+const registerForm = document.getElementById("registerForm");
 const urlForm = document.getElementById("urlForm");
 const logoutBtn = document.getElementById("logoutBtn");
+const showRegisterLink = document.getElementById("showRegisterLink");
+const showLoginLink = document.getElementById("showLoginLink");
 
 // Gerenciamento e alternância de telas
 function checkSession() {
     if (token) {
         loginSection.classList.add("hidden");
+        registerSection.classList.add("hidden");
         dashboardSection.classList.remove("hidden");
         logoutBtn.classList.remove("hidden");
         loadUrls();
     } else {
         loginSection.classList.remove("hidden");
+        registerSection.classList.add("hidden");
         dashboardSection.classList.add("hidden");
         logoutBtn.classList.add("hidden");
     }
 }
+
+// Alternar para tela de Cadastro
+showRegisterLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    loginSection.classList.add("hidden");
+    registerSection.classList.remove("hidden");
+});
+
+// Alternar para tela de Login
+showLoginLink.addEventListener("click", (event) => {
+    event.preventDefault();
+    registerSection.classList.add("hidden");
+    loginSection.classList.remove("hidden");
+});
 
 // Handler para expiração ou falta de autorização (403 Forbidden)
 function handleUnauthorized() {
@@ -66,6 +86,50 @@ loginForm.addEventListener("submit", async (event) => {
     } catch (error) {
         console.error(error);
         alert(error.message || "Não foi possível realizar o login.");
+    }
+});
+
+// Evento de Envio do Formulário de Cadastro
+registerForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const loginVal = document.getElementById("registerLoginInput").value.trim();
+    const senhaVal = document.getElementById("registerSenhaInput").value.trim();
+    const confirmSenhaVal = document.getElementById("registerConfirmSenhaInput").value.trim();
+
+    if (senhaVal !== confirmSenhaVal) {
+        alert("As senhas não coincidem.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`${API}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ login: loginVal, senha: senhaVal })
+        });
+
+        if (response.status === 409) {
+            throw new Error("Este usuário já está cadastrado.");
+        }
+
+        if (!response.ok) {
+            throw new Error("Erro ao realizar o cadastro.");
+        }
+
+        alert("Cadastro realizado com sucesso! Faça login para continuar.");
+
+        // Limpa campos do formulário
+        document.getElementById("registerLoginInput").value = "";
+        document.getElementById("registerSenhaInput").value = "";
+        document.getElementById("registerConfirmSenhaInput").value = "";
+
+        // Redireciona para tela de login
+        registerSection.classList.add("hidden");
+        loginSection.classList.remove("hidden");
+    } catch (error) {
+        console.error(error);
+        alert(error.message || "Não foi possível realizar o cadastro.");
     }
 });
 

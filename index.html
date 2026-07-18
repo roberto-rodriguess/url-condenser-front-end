@@ -51,6 +51,49 @@
             </div>
             <button type="submit" class="btn-primary">Entrar</button>
         </form>
+        <div class="auth-toggle">
+            <p>Não tem uma conta? <a href="#" id="showRegisterLink">Cadastre-se</a></p>
+        </div>
+    </section>
+
+    <!-- Seção de Cadastro (oculta por padrão) -->
+    <section id="registerSection" class="card login-card hidden" aria-labelledby="register-title">
+        <h2 id="register-title">Criar Conta</h2>
+        <p class="card-subtitle">Cadastre seu usuário para começar a encurtar links</p>
+
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="registerLoginInput">Usuário</label>
+                <input
+                        id="registerLoginInput"
+                        type="text"
+                        placeholder="Escolha seu usuário"
+                        required
+                >
+            </div>
+            <div class="form-group">
+                <label for="registerSenhaInput">Senha</label>
+                <input
+                        id="registerSenhaInput"
+                        type="password"
+                        placeholder="Escolha sua senha"
+                        required
+                >
+            </div>
+            <div class="form-group">
+                <label for="registerConfirmSenhaInput">Confirmar Senha</label>
+                <input
+                        id="registerConfirmSenhaInput"
+                        type="password"
+                        placeholder="Confirme sua senha"
+                        required
+                >
+            </div>
+            <button type="submit" class="btn-primary">Cadastrar</button>
+        </form>
+        <div class="auth-toggle">
+            <p>Já tem uma conta? <a href="#" id="showLoginLink">Entrar</a></p>
+        </div>
     </section>
 
     <!-- Container do Dashboard (oculto por padrão) -->
