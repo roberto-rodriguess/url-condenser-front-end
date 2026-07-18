@@ -338,3 +338,28 @@ td a:hover {
         padding: 12px 14px;
     }
 }
+
+/* Alternância de Autenticação */
+.auth-toggle {
+    margin-top: 22px;
+    text-align: center;
+}
+
+.auth-toggle p {
+    font-size: 14.5px;
+    color: var(--text-secondary);
+}
+
+.auth-toggle a {
+    color: #6366f1;
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    transition: color 0.2s ease, text-shadow 0.2s ease;
+}
+
+.auth-toggle a:hover {
+    color: #818cf8;
+    text-decoration: none;
+    text-shadow: 0 0 8px rgba(99, 102, 241, 0.4);
+}
