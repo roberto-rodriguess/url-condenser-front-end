@@ -250,10 +250,38 @@ function renderizarTabela(urls) {
     const table = document.getElementById("urlTable");
     table.innerHTML = "";
 
+    const payload = parseJwt(token);
+    const isAdmin = payload && payload.role === "ADMIN";
+
+    const theadTr = document.querySelector("#dashboardSection table thead tr");
+    if (theadTr) {
+        if (isAdmin) {
+            theadTr.innerHTML = `
+                <th scope="col">Original</th>
+                <th scope="col">Código</th>
+                <th scope="col">Cliques</th>
+                <th scope="col">Criador</th>
+                <th scope="col">Ações</th>
+            `;
+        } else {
+            theadTr.innerHTML = `
+                <th scope="col">Original</th>
+                <th scope="col">Código</th>
+                <th scope="col">Cliques</th>
+                <th scope="col">Ações</th>
+            `;
+        }
+    }
+
     const fragment = document.createDocumentFragment();
 
     urls.forEach(url => {
         const tr = document.createElement("tr");
+
+        let criadorTd = "";
+        if (isAdmin) {
+            criadorTd = `<td>${escapeHtml(url.criador || "-")}</td>`;
+        }
 
         tr.innerHTML = `
             <td>
@@ -263,6 +291,7 @@ function renderizarTabela(urls) {
                 <a href="${API}/${url.shortCode}" target="_blank">${url.shortCode}</a>
             </td>
             <td>${url.clicks}</td>
+            ${criadorTd}
             <td>
                 <button class="copy" data-url="${API}/${url.shortCode}">Copiar</button>
                 <button class="delete" data-id="${url.id}">Excluir</button>
@@ -279,6 +308,19 @@ function renderizarTabela(urls) {
 }
 
 // --- UTILITÁRIOS ---
+
+function parseJwt(token) {
+    try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+            return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+    } catch (e) {
+        return null;
+    }
+}
 
 function copyUrl(url) {
     navigator.clipboard.writeText(url)
