@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Inválido ou Expirado - UrlCondenser</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .error-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: 70vh;
+        }
+        .error-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+            background: var(--danger-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s infinite;
+        }
+        .error-title {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .error-message {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 450px;
+            line-height: 1.6;
+            margin-bottom: 30px;
+        }
+        .btn-home {
+            display: inline-block;
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            padding: 12px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px var(--glow-color);
+        }
+        .btn-home:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px var(--glow-color);
+            background: var(--primary-hover);
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div>
+                <h1>UrlCondenser</h1>
+                <p>Encurtador de URLs inteligente</p>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="card error-container">
+            <div class="error-icon">⚠️</div>
+            <h2 class="error-title">Link Inválido ou Expirado</h2>
+            <p class="error-message">
+                O link encurtado que você tentou acessar não foi encontrado, é inválido ou já expirou. 
+                Certifique-se de que digitou o endereço corretamente.
+            </p>
+            <a href="index.html" class="btn-home">Voltar para o Início</a>
+        </div>
+    </main>
+</body>
+</html>
